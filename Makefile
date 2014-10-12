@@ -16,7 +16,12 @@ run: build_run
 
 tests: build
 	javac -cp jar/mockito-all-1.9.5.jar:jar/junit-4.8.1.jar:src -d tests/ \
-		tests/ViterbiTest.java
+		tests/ViterbiTest.java \
+		tests/UtilsTest.java \
+		tests/BasicLanguageModelTest.java
+
 	java -cp tests:bin:jar/mockito-all-1.9.5.jar:jar/junit-4.8.1.jar \
 		org.junit.runner.JUnitCore \
-		ViterbiTest
+		ViterbiTest \
+		UtilsTest \
+		BasicLanguageModelTest
