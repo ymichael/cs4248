@@ -12,7 +12,7 @@ public class PosTagger {
     public PosTagger(String[] trainingSentences, String[] developmentSentences) {
         this.trainingSentences = trainingSentences;
         this.developmentSentences = developmentSentences;
-        this.model = new LanguageModel();
+        this.model = new BasicLanguageModel();
     }
 
     /**

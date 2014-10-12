@@ -26,6 +26,8 @@ public class build_tagger {
 		String[] trainingSentences = Utils.readLines(trainingSentencesFilePath);
 		String[] developmentSentences = Utils.readLines(developmentSentencesFilePath);
 		PosTagger tagger = new PosTagger(trainingSentences, developmentSentences);
+		
+		// Train on the given sentences.
 		tagger.train();
 
 		// Serialize the tagger and save it in the modelFilePath.

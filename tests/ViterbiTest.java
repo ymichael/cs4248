@@ -11,7 +11,7 @@ public class ViterbiTest {
 	
 	@Before
 	public void setUp() {
-		model = mock(LanguageModel.class);
+		model = mock(BasicLanguageModel.class);
 	}
 	
 	@Test

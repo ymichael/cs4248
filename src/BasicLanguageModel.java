@@ -3,7 +3,7 @@ import java.util.Set;
 
 import javax.management.RuntimeErrorException;
 
-public class LanguageModel implements ILanguageModel {
+public class BasicLanguageModel implements ILanguageModel {
 	/**
      * A mapping of tags to counts of tags that come after it.
      * Eg.
@@ -28,7 +28,7 @@ public class LanguageModel implements ILanguageModel {
      */
     private HashMap<String, Integer> tagToCount;
 
-	public LanguageModel() {
+	public BasicLanguageModel() {
         this.tagToNextTags = new HashMap<String, HashMap<String, Integer>>();
         this.tagToWords = new HashMap<String, HashMap<String, Integer>>();
         this.tagToCount = new HashMap<String, Integer>();
