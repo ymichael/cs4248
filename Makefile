@@ -13,3 +13,10 @@ train: build_train
 
 run: build_run
 	java -cp bin run_tagger data/sents.test model_file data/sents.out
+
+tests: build
+	javac -cp jar/mockito-all-1.9.5.jar:jar/junit-4.8.1.jar:src -d tests/ \
+		tests/ViterbiTest.java
+	java -cp tests:bin:jar/mockito-all-1.9.5.jar:jar/junit-4.8.1.jar \
+		org.junit.runner.JUnitCore \
+		ViterbiTest
