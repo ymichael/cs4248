@@ -7,8 +7,7 @@ public class BasicModel implements IModel {
 
 	@Override
 	public double getProbablityOfTagGivenStart(String t) {
-		return (double) this.language.getTagTagCount(Utils.START_OF_SENTENCE, t) /
-				this.language.getTagTagCountStartingWithTag(Utils.START_OF_SENTENCE);
+		return this.getProbabilityOfNextTagGivenTag(t, Utils.START_OF_SENTENCE);
 	}
 
 	@Override

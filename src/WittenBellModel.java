@@ -23,7 +23,7 @@ public class WittenBellModel extends BasicModel {
 	@Override
 	public double getProbabilityOfWordGivenTag(String w, String tag) {
 		long ctw = this.language.getWordTagCount(w, tag);
-		long ct = this.language.getTagWordCountStartingWithTag(tag);
+		long ct = this.language.getTagCount(tag);
 		long t = this.language.getTagWordTypesStartingWithTag(tag);
 		long v = getAllPossibleWordTagTypes();
 		long z = v - t;
@@ -38,7 +38,7 @@ public class WittenBellModel extends BasicModel {
 	@Override
 	public double getProbabilityOfNextTagGivenTag(String t2, String t1) {
 		long ctt = this.language.getTagTagCount(t1, t2);
-		long ct = this.language.getTagTagCountStartingWithTag(t1);
+		long ct = this.language.getTagCount(t1);
 		long t = this.language.getTagTagTypesStartingWithTag(t1);
 		long v = getAllPossibleTagTagTypes();
 		long z = v - t;

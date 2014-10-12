@@ -57,6 +57,7 @@ public class Language implements Serializable {
             // For <s> and </s> markers, we treat them as tags when counting.
             // This allows us to use P(TT) when counting probabilities later on.
             if (j == 0) {
+            	this.incrementTagCount(Utils.START_OF_SENTENCE);
             	this.addTagTagPair(Utils.START_OF_SENTENCE, currentTaggedToken.getPosTag());
             }
             if (j == taggedTokens.length - 1) {
@@ -74,14 +75,6 @@ public class Language implements Serializable {
 		return this.tagToCount.containsKey(t) ? this.tagToCount.get(t) : 0;
 	}
 
-	public int getTagTagCountStartingWithTag(String t) {
-		HashMap<String, Integer> nextTagToCount = this.tagToNextTags.get(t);
-		int starts = 0;
-        for (int v : nextTagToCount.values()) {
-        	starts += v;
-        }
-		return starts;
-	}
 	
 	public int getTagTagTypesStartingWithTag(String t) {
 		HashMap<String, Integer> nextTagToCount = this.tagToNextTags.get(t);
@@ -91,15 +84,6 @@ public class Language implements Serializable {
 	public int getTagWordTypesStartingWithTag(String t) {
 		HashMap<String, Integer> wordToCount = this.tagToWords.get(t);
 		return wordToCount.size();
-	}
-	
-	public int getTagWordCountStartingWithTag(String t) {
-		HashMap<String, Integer> wordToCount = this.tagToWords.get(t);
-		int starts = 0;
-        for (int v : wordToCount.values()) {
-        	starts += v;
-        }
-		return starts;
 	}
 
 	public int getWordCount(String w) {

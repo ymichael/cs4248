@@ -6,7 +6,8 @@ import java.io.Serializable;
  *
  */
 public class PosTagger implements Serializable {
-    private transient String[] trainingSentences;
+	private static final long serialVersionUID = 1L;
+	private transient String[] trainingSentences;
     private transient String[] developmentSentences;
     private transient IModel model;
 
