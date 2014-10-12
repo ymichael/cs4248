@@ -14,7 +14,6 @@ public class Viterbi {
 	public Viterbi(ILanguageModel model, String sentenceToTag) {
 		this.model = model;
 		this.tokens = sentenceToTag.split(" ");
-		System.out.println(Arrays.toString(this.tokens));
 		this.allTags = model.getAllTags();
 	}
 
@@ -36,11 +35,7 @@ public class Viterbi {
 			bestTags[i] = this.indexAndCurrentTagToBestNextTag.get(i - 1).get(bestTags[i - 1]);
 		}
 
-		System.out.println(Arrays.toString(bestTags));
-
 		TaggedToken[] taggedTokens = new TaggedToken[this.tokens.length];
-
-
 
 		for (int i = 0; i < tokens.length; i++) {
 			taggedTokens[i] = new TaggedToken(this.tokens[i], bestTags[i]);
@@ -61,7 +56,7 @@ public class Viterbi {
 
 		double max = Double.NEGATIVE_INFINITY;
 		for (String tag : this.allTags) {
-			double p = this.model.getProbablityOfTagGivenStart(tag) * this.maxProbablityFrom(0, tag);
+			double p = Math.log(this.model.getProbablityOfTagGivenStart(tag)) + this.maxProbablityFrom(0, tag);
 			if (p > max) {
 				max = p;
 				maxProbability = max;
@@ -75,48 +70,20 @@ public class Viterbi {
 			String currentWord = this.tokens[index];
 			double max = Double.NEGATIVE_INFINITY;
 			for (String nextTag : this.allTags) {
-				double p = this.model.getProbabilityOfWordGivenTag(currentWord, currentTag);
+				double p = Math.log(this.model.getProbabilityOfWordGivenTag(currentWord, currentTag));
 				if (index == this.tokens.length - 1) {
-					p *= this.model.getProbabilityOfEndGivenTag(currentTag);
+					p += Math.log(this.model.getProbabilityOfEndGivenTag(currentTag));
 				} else {
-					p *= this.model.getProbabilityOfNextTagGivenTag(nextTag, currentTag);
-					p *= this.maxProbablityFrom(index + 1, nextTag);
+					p += Math.log(this.model.getProbabilityOfNextTagGivenTag(nextTag, currentTag));
+					p += this.maxProbablityFrom(index + 1, nextTag);
 				}
-				if (p > max) {
+				if (p >= max) {
 					max = p;
 					this.indexAndCurrentTagToBestNextTag.get(index).put(currentTag, nextTag);
-					this.indexAndCurrentTagToMaxProbability.get(index).put(currentTag, p);
+					this.indexAndCurrentTagToMaxProbability.get(index).put(currentTag, max);
 				}
 			}
 		}
 		return this.indexAndCurrentTagToMaxProbability.get(index).get(currentTag);
 	}
-//
-//	private double tagHelper(int index, String currentTag, String[] tokens) {
-//		Double memo = this.indexAndCurrentTagToMaxProbability.get(index).get(currentTag);
-//		if (memo != null) {
-//			return memo;
-//		}
-//
-//		String currentWord = tokens[index];
-//		double max = Double.NEGATIVE_INFINITY;
-//		String maxTag = "";
-//		for (String nextTag : this.allTags) {
-//			double p = this.model.getProbabilityOfWordGivenTag(currentWord, currentTag);
-//			if (index == tokens.length - 1) {
-//				p *= this.model.getProbabilityOfEndGivenTag(currentTag);
-//			} else {
-//				p *= this.model.getProbabilityOfNextTagGivenTag(nextTag, currentTag);
-//				p *= this.tagHelper(index + 1, nextTag, tokens);
-//			}
-//			if (p > max) {
-//				max = p;
-//				maxTag = nextTag;
-//			}
-//		}
-//		this.indexAndCurrentTagToBestNextTag.get(index).put(currentTag, maxTag);
-//		this.indexAndCurrentTagToMaxProbability.get(index).put(currentTag, max);
-//		return max;
-//	}
-
 }

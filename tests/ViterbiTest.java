@@ -35,7 +35,7 @@ public class ViterbiTest {
 		stubWordTag("plants", "N", (double) 1/10);
 		stubWordTag("plants", "V", (double) 1/20);
 
-		assertEquals((double) 3/5000, viterbi.getMaxProbability(), 0.000001 /* delta */);
+		assertEquals(Math.log((double) 3/5000), viterbi.getMaxProbability(), 0.000001 /* delta */);
 		assertEquals("water/V plants/N", viterbi.getTaggedSentence());
 	}
 
