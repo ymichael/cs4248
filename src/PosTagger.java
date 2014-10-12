@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * Pos Tagger class.
  * @author michael
@@ -15,7 +17,7 @@ public class PosTagger {
         this.trainingSentences = trainingSentences;
         this.developmentSentences = developmentSentences;
         this.language = new Language();
-        this.model = new LaplaceModel(this.language);
+        this.model = new WittenBellModel(this.language);
     }
 
     /**
@@ -27,6 +29,7 @@ public class PosTagger {
         }
 
         System.out.println("Done Training.");
+        System.out.println(Arrays.toString(language.getAllTags()));
         this.tune();
 
 //        String s = "The/DT decision/NN to/TO make/VB the/DT bid/NN for/IN Nekoosa/NNP ,/, for/IN example/NN ,/, was/VBD made/VBN only/RB after/IN all/DT six/CD members/NNS of/IN Georgia-Pacific/NNP 's/POS management/NN committee/NN signed/VBD onto/IN the/DT deal/NN --/: even/RB though/IN Mr./NNP Hahn/NNP knew/VBD he/PRP wanted/VBD to/TO go/VB after/IN the/DT company/NN early/RB on/IN ,/, says/VBZ Mr./NNP Correll/NNP ./.";

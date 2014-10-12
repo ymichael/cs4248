@@ -104,14 +104,14 @@ public class Language {
 		return this.wordToCount.containsKey(w) ? this.wordToCount.get(w) : 0;
 	}
 
-	public int getTagCount() {
+	public int getTagTypeCount() {
 		return this.tagToCount.size();
 	}
 
-	public int getWordCount() {
+	public int getWordTypeCount() {
 		return this.wordToCount.size();
 	}
-
+	
 	private void incrementTagCount(String tag) {
 		this.tagToCount.put(tag, this.getTagCount(tag) + 1);
     }
