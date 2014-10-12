@@ -68,6 +68,7 @@ public class Language implements Serializable {
 
 	public String[] getAllTags() {
 		Set<String> tagSet = this.tagToCount.keySet();
+		tagSet.remove(Utils.START_OF_SENTENCE);
 		return tagSet.toArray(new String[tagSet.size()]);
 	}
 
