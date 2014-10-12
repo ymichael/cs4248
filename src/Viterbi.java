@@ -7,40 +7,47 @@ public class Viterbi {
 	private String[] tokens;
 	private HashMap<Integer, HashMap<String, String>> indexAndCurrentTagToBestNextTag;
 	private HashMap<Integer, HashMap<String, Double>> indexAndCurrentTagToMaxProbability;
-	
+
 	private Double maxProbability;
 	private String bestFirstTag;
 
 	public Viterbi(ILanguageModel model, String sentenceToTag) {
 		this.model = model;
 		this.tokens = sentenceToTag.split(" ");
+		System.out.println(Arrays.toString(this.tokens));
 		this.allTags = model.getAllTags();
 	}
-	
+
 	public double getMaxProbability() {
 		if (this.maxProbability == null) {
 			this.run();
 		}
 		return this.maxProbability;
 	}
-	
+
 	public String getTaggedSentence() {
 		if (this.bestFirstTag == null) {
 			this.run();
 		}
-		
+
 		String[] bestTags = new String[this.tokens.length];
 		bestTags[0] = this.bestFirstTag;
 		for (int i = 1; i < this.tokens.length; i++) {
 			bestTags[i] = this.indexAndCurrentTagToBestNextTag.get(i - 1).get(bestTags[i - 1]);
 		}
+
+		System.out.println(Arrays.toString(bestTags));
+
 		TaggedToken[] taggedTokens = new TaggedToken[this.tokens.length];
+
+
+
 		for (int i = 0; i < tokens.length; i++) {
 			taggedTokens[i] = new TaggedToken(this.tokens[i], bestTags[i]);
 		}
-		return Utils.getSentence(taggedTokens);
+		return Utils.getTaggedSentence(taggedTokens);
 	}
-	
+
 	/**
 	 * Run the viterbi algorithm.
 	 */
@@ -51,7 +58,7 @@ public class Viterbi {
 			this.indexAndCurrentTagToBestNextTag.put(i, new HashMap<String, String>());
 			this.indexAndCurrentTagToMaxProbability.put(i, new HashMap<String, Double>());
 		}
-	
+
 		double max = Double.NEGATIVE_INFINITY;
 		for (String tag : this.allTags) {
 			double p = this.model.getProbablityOfTagGivenStart(tag) * this.maxProbablityFrom(0, tag);
@@ -62,9 +69,9 @@ public class Viterbi {
 			}
 		}
 	}
-	
+
 	private double maxProbablityFrom(int index, String currentTag) {
-		if (!this.indexAndCurrentTagToMaxProbability.get(index).containsKey(currentTag)) {			
+		if (!this.indexAndCurrentTagToMaxProbability.get(index).containsKey(currentTag)) {
 			String currentWord = this.tokens[index];
 			double max = Double.NEGATIVE_INFINITY;
 			for (String nextTag : this.allTags) {
@@ -84,7 +91,7 @@ public class Viterbi {
 		}
 		return this.indexAndCurrentTagToMaxProbability.get(index).get(currentTag);
 	}
-//	
+//
 //	private double tagHelper(int index, String currentTag, String[] tokens) {
 //		Double memo = this.indexAndCurrentTagToMaxProbability.get(index).get(currentTag);
 //		if (memo != null) {

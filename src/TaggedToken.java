@@ -14,7 +14,7 @@ public class TaggedToken {
 		this.parsedValue[TOKEN_INDEX] = taggedToken.substring(0, taggedToken.lastIndexOf(POS_SEP));
 		this.parsedValue[POS_TAG_INDEX] = taggedToken.substring(taggedToken.lastIndexOf(POS_SEP) + 1);
 	}
-	
+
 	public TaggedToken(String token, String posTag) {
 		this.parsedValue = new String[]{token, posTag};
 	}
@@ -30,5 +30,14 @@ public class TaggedToken {
     @Override
     public String toString() {
         return this.getToken() + POS_SEP + this.getPosTag();
-    }    
+    }
+
+    @Override
+    public boolean equals(Object o) {
+    	if (o instanceof TaggedToken) {
+    		return ((TaggedToken) o).getToken().equals(this.getToken()) &&
+    			((TaggedToken) o).getPosTag().equals(this.getPosTag());
+    	}
+    	return false;
+    }
 }

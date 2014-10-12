@@ -17,7 +17,7 @@ public class Utils {
 	 * Each element in the resulting array corresponds to a line in the given file.
 	 * @param filePath
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	static String[] readLines(String filePath) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filePath));
@@ -33,7 +33,7 @@ public class Utils {
 	    }
 	    return lines.toArray(new String[lines.size()]);
 	}
-	
+
 	/**
 	 * Writes contents to the given file path.
 	 * @param filePath
@@ -47,9 +47,9 @@ public class Utils {
 		writer.print(contents);
 		writer.close();
 	}
-	
+
 	/**
-	 * Parses a POS tagged sentence and returns an array of TaggedTokens in order. 
+	 * Parses a POS tagged sentence and returns an array of TaggedTokens in order.
 	 * @param taggedSentence
 	 * @return
 	 */
@@ -61,8 +61,8 @@ public class Utils {
         }
         return taggedTokens;
     }
-    
-    static String getSentence(TaggedToken[] taggedTokens) {
+
+    static String getTaggedSentence(TaggedToken[] taggedTokens) {
     	StringBuilder stringBuilder = new StringBuilder();
         for (int j = 0; j < taggedTokens.length; j++) {
         	if (j != 0) {
@@ -82,10 +82,10 @@ public class Utils {
         TaggedToken[] taggedTokens = parseSentence(taggedSentence);
         StringBuilder stringBuilder = new StringBuilder();
         for (int j = 0; j < taggedTokens.length; j++) {
+        	if (j != 0) {
+        		stringBuilder.append(" ");
+        	}
             stringBuilder.append(taggedTokens[j].getToken());
-            if (j != 0) {
-                stringBuilder.append(" ");
-            }
         }
         return stringBuilder.toString();
     }
