@@ -79,6 +79,25 @@ public class Language {
         }
 		return starts;
 	}
+	
+	public int getTagTagTypesStartingWithTag(String t) {
+		HashMap<String, Integer> nextTagToCount = this.tagToNextTags.get(t);
+		return nextTagToCount.size();
+	}
+	
+	public int getTagWordTypesStartingWithTag(String t) {
+		HashMap<String, Integer> wordToCount = this.tagToWords.get(t);
+		return wordToCount.size();
+	}
+	
+	public int getTagWordCountStartingWithTag(String t) {
+		HashMap<String, Integer> wordToCount = this.tagToWords.get(t);
+		int starts = 0;
+        for (int v : wordToCount.values()) {
+        	starts += v;
+        }
+		return starts;
+	}
 
 	public int getWordCount(String w) {
 		w = this.normalizeWord(w);
