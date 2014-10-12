@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 
 public class Viterbi {
-	private ILanguageModel model;
+	private IModel model;
 	private String[] allTags;
 	private String[] tokens;
 	private HashMap<Integer, HashMap<String, String>> indexAndCurrentTagToBestNextTag;
@@ -11,10 +11,10 @@ public class Viterbi {
 	private Double maxProbability;
 	private String bestFirstTag;
 
-	public Viterbi(ILanguageModel model, String sentenceToTag) {
+	public Viterbi(IModel model, String[] allTags, String sentenceToTag) {
 		this.model = model;
 		this.tokens = sentenceToTag.split(" ");
-		this.allTags = model.getAllTags();
+		this.allTags = allTags;
 	}
 
 	public double getMaxProbability() {

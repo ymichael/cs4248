@@ -1,9 +1,7 @@
 import java.util.HashMap;
 import java.util.Set;
 
-import javax.management.RuntimeErrorException;
-
-public class BasicLanguageModel implements ILanguageModel {
+public class Language {
 	/**
      * A mapping of tags to counts of tags that come after it.
      * Eg.
@@ -27,20 +25,19 @@ public class BasicLanguageModel implements ILanguageModel {
      * A mapping of the number of times a tag appears.
      */
     private HashMap<String, Integer> tagToCount;
-    
+
     /**
      * A mapping of the number of times a word appears.
      */
     private HashMap<String, Integer> wordToCount;
 
-	public BasicLanguageModel() {
+	public Language() {
         this.tagToNextTags = new HashMap<String, HashMap<String, Integer>>();
         this.tagToWords = new HashMap<String, HashMap<String, Integer>>();
         this.tagToCount = new HashMap<String, Integer>();
         this.wordToCount = new HashMap<String, Integer>();
 	}
 
-	@Override
 	public void addTrainingSentence(String sentence) {
 		TaggedToken[] taggedTokens = Utils.parseSentence(sentence);
         for (int j = 0; j < taggedTokens.length; j++) {
@@ -65,48 +62,47 @@ public class BasicLanguageModel implements ILanguageModel {
         }
 	}
 
-	@Override
 	public String[] getAllTags() {
 		Set<String> tagSet = this.tagToCount.keySet();
 		return tagSet.toArray(new String[tagSet.size()]);
 	}
 
-	@Override
-	public double getProbablityOfTagGivenStart(String t) {
-		HashMap<String, Integer> nextTagToCount = this.tagToNextTags.get(Utils.START_OF_SENTENCE);
+	public int getTagCount(String t) {
+		return this.tagToCount.containsKey(t) ? this.tagToCount.get(t) : 0;
+	}
+
+	public int getTagTagCountStartingWithTag(String t) {
+		HashMap<String, Integer> nextTagToCount = this.tagToNextTags.get(t);
 		int starts = 0;
         for (int v : nextTagToCount.values()) {
         	starts += v;
         }
-		return (double) this.getTagTagCount(Utils.START_OF_SENTENCE, t) / starts;
+		return starts;
 	}
 
-	@Override
-	public double getProbabilityOfEndGivenTag(String t) {
-		return (double) this.getProbabilityOfNextTagGivenTag(Utils.END_OF_SENTENCE, t);
-	}
-
-	@Override
-	public double getProbabilityOfWordGivenTag(String w, String t) {
+	public int getWordCount(String w) {
 		w = this.normalizeWord(w);
-		return (double)this.getWordTagCount(w, t) / this.getTagCount(t);
+		return this.wordToCount.containsKey(w) ? this.wordToCount.get(w) : 0;
 	}
 
-	@Override
-	public double getProbabilityOfNextTagGivenTag(String t2, String t1) {
-		return (double)this.getTagTagCount(t1, t2) / this.getTagCount(t1);
+	public int getTagCount() {
+		return this.tagToCount.size();
 	}
 
-	protected void incrementTagCount(String tag) {
+	public int getWordCount() {
+		return this.wordToCount.size();
+	}
+
+	private void incrementTagCount(String tag) {
 		this.tagToCount.put(tag, this.getTagCount(tag) + 1);
     }
-	
-	protected void incrementWordCount(String w) {
+
+	private void incrementWordCount(String w) {
 		w = this.normalizeWord(w);
 		this.wordToCount.put(w, this.getWordCount(w) + 1);
     }
 
-	protected void addTagTagPair(String t1, String t2) {
+	private void addTagTagPair(String t1, String t2) {
     	HashMap<String, Integer> nextTagToCount = this.tagToNextTags.get(t1);
         if (nextTagToCount == null) {
         	nextTagToCount = new HashMap<String, Integer>();
@@ -116,7 +112,7 @@ public class BasicLanguageModel implements ILanguageModel {
         nextTagToCount.put(t2, existingCount + 1);
     }
 
-	protected void addWordTagPair(String w, String t) {
+	private void addWordTagPair(String w, String t) {
     	HashMap<String, Integer> wordToCount = this.tagToWords.get(t);
         if (wordToCount == null) {
         	wordToCount = new HashMap<String, Integer>();
@@ -127,7 +123,7 @@ public class BasicLanguageModel implements ILanguageModel {
         wordToCount.put(w, existingCount + 1);
     }
 
-	protected int getTagTagCount(String t1, String t2) {
+	public int getTagTagCount(String t1, String t2) {
     	HashMap<String, Integer> nextTagToCount = this.tagToNextTags.get(t1);
         if (nextTagToCount == null) {
         	nextTagToCount = new HashMap<String, Integer>();
@@ -136,7 +132,7 @@ public class BasicLanguageModel implements ILanguageModel {
         return nextTagToCount.containsKey(t2) ? nextTagToCount.get(t2) : 0;
 	}
 
-	protected int getWordTagCount(String w, String t) {
+	public int getWordTagCount(String w, String t) {
     	HashMap<String, Integer> wordToCount = this.tagToWords.get(t);
         if (wordToCount == null) {
         	wordToCount = new HashMap<String, Integer>();
@@ -145,25 +141,8 @@ public class BasicLanguageModel implements ILanguageModel {
         w = this.normalizeWord(w);
         return wordToCount.containsKey(w) ? wordToCount.get(w) : 0;
 	}
-	
-	protected String normalizeWord(String w) {
-		return w.toLowerCase();
-	}
 
-	protected int getTagCount(String t) {
-		return this.tagToCount.containsKey(t) ? this.tagToCount.get(t) : 0;
-	}
-	
-	protected int getWordCount(String w) {
-		w = this.normalizeWord(w);
-		return this.wordToCount.containsKey(w) ? this.wordToCount.get(w) : 0;
-	}
-	
-	protected int getTagCount() {
-		return this.tagToCount.size();
-	}
-	
-	protected int getWordCount() {
-		return this.wordToCount.size();
+	private String normalizeWord(String w) {
+		return w.toLowerCase();
 	}
 }

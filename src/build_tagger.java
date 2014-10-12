@@ -16,17 +16,17 @@ public class build_tagger {
 			System.out.println(String.format("Got: %s", Arrays.toString(args)));
 			return;
 		}
-		
+
 		// Extract the various arguments to the program.
 		String trainingSentencesFilePath = args[0];
 		String developmentSentencesFilePath = args[1];
 		String modelFilePath = args[2];
-		
+
 		// Create tagger and train it.
 		String[] trainingSentences = Utils.readLines(trainingSentencesFilePath);
 		String[] developmentSentences = Utils.readLines(developmentSentencesFilePath);
 		PosTagger tagger = new PosTagger(trainingSentences, developmentSentences);
-		
+
 		// Train on the given sentences.
 		tagger.train();
 

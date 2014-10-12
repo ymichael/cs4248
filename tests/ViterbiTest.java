@@ -6,19 +6,17 @@ import org.junit.Test;
 
 
 public class ViterbiTest {
-	ILanguageModel model;
+	IModel model;
 	Viterbi viterbi;
 
 	@Before
 	public void setUp() {
-		model = mock(BasicLanguageModel.class);
+		model = mock(IModel.class);
+		viterbi = new Viterbi(model, new String[]{"N", "V"}, "water plants");
 	}
 
 	@Test
 	public void testViterbiAlgorithm() {
-		when(model.getAllTags()).thenReturn(new String[]{"N", "V"});
-		viterbi = new Viterbi(model, "water plants");
-
 		stubTagTag("N", "N", (double) 1/5);
 		stubTagTag("N", "V", (double) 1/2);
 		stubTagTag("V", "N", (double) 3/5);
