@@ -1,7 +1,10 @@
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
-public class Language {
+public class Language implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	/**
      * A mapping of tags to counts of tags that come after it.
      * Eg.

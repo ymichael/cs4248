@@ -19,8 +19,6 @@ public class WittenBellModel extends BasicModel {
 		}
 		return allPossibleWordTagTypes;
 	}
-	
-	
 
 	@Override
 	public double getProbabilityOfWordGivenTag(String w, String tag) {

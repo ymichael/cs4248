@@ -1,15 +1,15 @@
-import java.util.Arrays;
+import java.io.Serializable;
 
 /**
  * Pos Tagger class.
  * @author michael
  *
  */
-public class PosTagger {
-    private String[] trainingSentences;
-    private String[] developmentSentences;
+public class PosTagger implements Serializable {
+    private transient String[] trainingSentences;
+    private transient String[] developmentSentences;
+    private transient IModel model;
 
-    private IModel model;
     private Language language;
 
 
@@ -19,6 +19,13 @@ public class PosTagger {
         this.language = new Language();
         this.model = new WittenBellModel(this.language);
     }
+    
+    public IModel getModel() {
+    	if (this.model == null) {
+    		this.model = new WittenBellModel(this.language);
+    	}
+    	return this.model;
+    }
 
     /**
      * Trains tagger using training and development sentences.
@@ -27,35 +34,22 @@ public class PosTagger {
         for (int i = 0; i < this.trainingSentences.length; i++) {
             this.language.addTrainingSentence(this.trainingSentences[i]);
         }
-
-        System.out.println("Done Training.");
-        System.out.println(Arrays.toString(language.getAllTags()));
-        this.tune();
-
-//        String s = "The/DT decision/NN to/TO make/VB the/DT bid/NN for/IN Nekoosa/NNP ,/, for/IN example/NN ,/, was/VBD made/VBN only/RB after/IN all/DT six/CD members/NNS of/IN Georgia-Pacific/NNP 's/POS management/NN committee/NN signed/VBD onto/IN the/DT deal/NN --/: even/RB though/IN Mr./NNP Hahn/NNP knew/VBD he/PRP wanted/VBD to/TO go/VB after/IN the/DT company/NN early/RB on/IN ,/, says/VBZ Mr./NNP Correll/NNP ./.";
-//
-//        TaggedToken[] expectedTaggedTokens = Utils.parseSentence(s);
-//        String untaggedSentence = Utils.stripTags(s);
-//
-//        // Tag using language model.
-//        String taggedSentence = new Viterbi(this.model, untaggedSentence).getTaggedSentence();
-//        TaggedToken[] actualTaggedTokens = Utils.parseSentence(taggedSentence);
-//        System.out.println(s);
-//        System.out.println(taggedSentence);
-
+    }
+    
+    public String tagSentence(String sentence) {
+    	Viterbi v = new Viterbi(getModel(), this.language.getAllTags(), sentence);
+    	return v.getTaggedSentence();
     }
 
     private void tune() {
     	int totalTagged = 0;
     	int correct = 0;
 
-    	for (int i = 0; i < this.developmentSentences.length; i++) {
+    	for (int i = 0; i < Math.max(this.developmentSentences.length, 100); i++) {
     		TaggedToken[] expectedTaggedTokens = Utils.parseSentence(this.developmentSentences[i]);
             String untaggedSentence = Utils.stripTags(this.developmentSentences[i]);
-
             int t = 0;
         	int c = 0;
-
             // Tag using language model.
             String taggedSentence =
             	new Viterbi(this.model, this.language.getAllTags(), untaggedSentence).getTaggedSentence();
@@ -71,18 +65,14 @@ public class PosTagger {
             		c += 1;
             	}
             }
-
             if ((double) c/t < .9) {
             	System.out.println(this.developmentSentences[i]);
             	System.out.println(taggedSentence);
             	System.out.println((double) c/t);
             }
+            System.out.println((double) correct/totalTagged);
         }
 
     	System.out.println((double) correct/totalTagged);
-    }
-
-    public String serialize() {
-        return "";
     }
 }

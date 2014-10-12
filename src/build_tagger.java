@@ -1,14 +1,10 @@
-
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
 
 public class build_tagger {
-
-	public build_tagger() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public static void main(String[] args) throws IOException {
 		// Verify that the correct arguments are passed in.
 		if (args.length < 3) {
@@ -31,7 +27,10 @@ public class build_tagger {
 		tagger.train();
 
 		// Serialize the tagger and save it in the modelFilePath.
-		Utils.writeToFile(modelFilePath, tagger.serialize());
+		FileOutputStream fileOut = new FileOutputStream(modelFilePath);
+		ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+		objectOut.writeObject(tagger);
+		objectOut.close();
+		fileOut.close();
 	}
-
 }

@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -32,20 +29,6 @@ public class Utils {
 	        br.close();
 	    }
 	    return lines.toArray(new String[lines.size()]);
-	}
-
-	/**
-	 * Writes contents to the given file path.
-	 * @param filePath
-	 * @param contents
-	 * @throws FileNotFoundException
-	 * @throws UnsupportedEncodingException
-	 */
-	static void writeToFile(String filePath, String contents)
-			throws FileNotFoundException, UnsupportedEncodingException {
-		PrintWriter writer = new PrintWriter(filePath, "UTF-8");
-		writer.print(contents);
-		writer.close();
 	}
 
 	/**

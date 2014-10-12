@@ -12,7 +12,7 @@ train: build_train
 	java -cp bin build_tagger data/sents.train data/sents.devt model_file
 
 run: build_run
-	java -cp bin run_tagger data/sents.test model_file data/sents.out
+	java -cp bin run_tagger data/sents.test model_file data/sents1.out
 
 tests: build
 	javac -cp jar/mockito-all-1.9.5.jar:jar/junit-4.8.1.jar:src -d tests/ \
