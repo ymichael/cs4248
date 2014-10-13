@@ -1,3 +1,4 @@
+
 public class WittenBellModel extends BasicModel {
 	Long allPossibleWordTagTypes;
 	Long allPossibleTagTagTypes;

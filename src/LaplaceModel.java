@@ -1,3 +1,4 @@
+
 public class LaplaceModel extends BasicModel {
 	Long allPossibleWordTagTypes;
 	Long allPossibleTagTagTypes;

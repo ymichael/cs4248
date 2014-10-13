@@ -1,3 +1,4 @@
+
 public interface IModel {
 	/**
 	 * P(t|<s>)

@@ -1,3 +1,4 @@
+
 public class BasicModel implements IModel {
 	protected Language language;
 
