@@ -30,7 +30,7 @@ public class run_tagger {
 		PosTagger tagger = (PosTagger) objIn.readObject();
 		objIn.close();
 		fileIn.close();
-		
+
 		// Read test sentences.
 		String[] testSentences = Utils.readLines(testSentencesFilePath);
 

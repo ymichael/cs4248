@@ -2,18 +2,18 @@
 public class WittenBellModel extends BasicModel {
 	Long allPossibleWordTagTypes;
 	Long allPossibleTagTagTypes;
-	
+
 	public WittenBellModel(Language language) {
 		super(language);
 	}
-	
+
 	private Long getAllPossibleTagTagTypes() {
 		if (allPossibleTagTagTypes == null) {
 			allPossibleTagTagTypes = (long) Math.pow(this.language.getTagTypeCount(), 2);
 		}
 		return allPossibleTagTagTypes;
 	}
-	
+
 	private Long getAllPossibleWordTagTypes() {
 		if (allPossibleWordTagTypes == null) {
 			allPossibleWordTagTypes = (long) this.language.getTagTypeCount() * this.language.getWordTypeCount();
@@ -28,7 +28,7 @@ public class WittenBellModel extends BasicModel {
 		long t = this.language.getTagWordTypesStartingWithTag(tag);
 		long v = getAllPossibleWordTagTypes();
 		long z = v - t;
-		
+
 		if (ctw > 0) {
 			return (double) ctw / (ct + t);
 		} else {
@@ -43,7 +43,7 @@ public class WittenBellModel extends BasicModel {
 		long t = this.language.getTagTagTypesStartingWithTag(t1);
 		long v = getAllPossibleTagTagTypes();
 		long z = v - t;
-		
+
 		if (ctt > 0) {
 			return (double) ctt / (ct + t);
 		} else {

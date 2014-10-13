@@ -77,12 +77,12 @@ public class Language implements Serializable {
 		return this.tagToCount.containsKey(t) ? this.tagToCount.get(t) : 0;
 	}
 
-	
+
 	public int getTagTagTypesStartingWithTag(String t) {
 		HashMap<String, Integer> nextTagToCount = this.tagToNextTags.get(t);
 		return nextTagToCount.size();
 	}
-	
+
 	public int getTagWordTypesStartingWithTag(String t) {
 		HashMap<String, Integer> wordToCount = this.tagToWords.get(t);
 		return wordToCount.size();
@@ -100,7 +100,7 @@ public class Language implements Serializable {
 	public int getWordTypeCount() {
 		return this.wordToCount.size();
 	}
-	
+
 	private void incrementTagCount(String tag) {
 		this.tagToCount.put(tag, this.getTagCount(tag) + 1);
     }

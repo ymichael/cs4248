@@ -52,7 +52,7 @@ public class PosTagger implements Serializable {
     	for (int i = 0; i < this.developmentSentences.length; i++) {
     		TaggedToken[] expectedTaggedTokens = Utils.parseSentence(this.developmentSentences[i]);
             String untaggedSentence = Utils.stripTags(this.developmentSentences[i]);
-            
+
             // Tag using language model.
             String taggedSentence =
             	new Viterbi(this.model, this.language.getAllTags(), untaggedSentence).getTaggedSentence();
