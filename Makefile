@@ -1,4 +1,7 @@
-.PHONY: build build_train build_run build_verify train run verify
+.PHONY: build build_train build_run build_verify train run verify sunfire
+
+sunfire:
+	rsync -avz . michael@sunfire:~/cs4248
 
 build: build_train build_run
 
