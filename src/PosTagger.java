@@ -10,7 +10,6 @@ public class PosTagger implements Serializable {
 	private transient String[] trainingSentences;
     private transient String[] developmentSentences;
     private transient IModel model;
-
     private Language language;
 
 
@@ -19,8 +18,9 @@ public class PosTagger implements Serializable {
         this.developmentSentences = developmentSentences;
         this.language = new Language();
         this.model = new WittenBellModel(this.language);
+        // this.model = new LaplaceModel(this.language);
     }
-    
+
     public IModel getModel() {
     	if (this.model == null) {
     		this.model = new WittenBellModel(this.language);
@@ -36,21 +36,22 @@ public class PosTagger implements Serializable {
             this.language.addTrainingSentence(this.trainingSentences[i]);
         }
     }
-    
+
     public String tagSentence(String sentence) {
     	Viterbi v = new Viterbi(getModel(), this.language.getAllTags(), sentence);
     	return v.getTaggedSentence();
     }
 
-    private void tune() {
+    /**
+     * Verifies the pos tagger on development sentences.
+     */
+    public void verify() {
     	int totalTagged = 0;
     	int correct = 0;
-
-    	for (int i = 0; i < Math.max(this.developmentSentences.length, 100); i++) {
+    	for (int i = 0; i < this.developmentSentences.length; i++) {
     		TaggedToken[] expectedTaggedTokens = Utils.parseSentence(this.developmentSentences[i]);
             String untaggedSentence = Utils.stripTags(this.developmentSentences[i]);
-            int t = 0;
-        	int c = 0;
+            
             // Tag using language model.
             String taggedSentence =
             	new Viterbi(this.model, this.language.getAllTags(), untaggedSentence).getTaggedSentence();
@@ -60,18 +61,10 @@ public class PosTagger implements Serializable {
             	String expectedPosTag = expectedTaggedTokens[j].getPosTag();
             	String actualPosTag = actualTaggedTokens[j].getPosTag();
             	totalTagged += 1;
-            	t += 1;
             	if (expectedPosTag.equals(actualPosTag)) {
             		correct += 1;
-            		c += 1;
             	}
             }
-            if ((double) c/t < .9) {
-            	System.out.println(this.developmentSentences[i]);
-            	System.out.println(taggedSentence);
-            	System.out.println((double) c/t);
-            }
-            System.out.println((double) correct/totalTagged);
         }
 
     	System.out.println((double) correct/totalTagged);

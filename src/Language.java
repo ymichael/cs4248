@@ -150,6 +150,7 @@ public class Language implements Serializable {
 	}
 
 	private String normalizeWord(String w) {
-		return w.toLowerCase();
+        // return w.toLowerCase();
+		return w;
 	}
 }
