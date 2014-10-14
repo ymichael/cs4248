@@ -46,7 +46,7 @@ public class PosTagger implements Serializable {
     /**
      * Verifies the pos tagger on development sentences.
      */
-    public void verify() {
+    public double verify() {
     	int totalTagged = 0;
     	int correct = 0;
     	for (int i = 0; i < this.developmentSentences.length; i++) {
@@ -67,7 +67,6 @@ public class PosTagger implements Serializable {
             	}
             }
         }
-
-    	System.out.println((double) correct/totalTagged);
+    	return (double) correct/totalTagged;
     }
 }
