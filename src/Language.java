@@ -74,7 +74,8 @@ public class Language implements Serializable {
 	}
 
 	public int getTagCount(String t) {
-		return this.tagToCount.containsKey(t) ? this.tagToCount.get(t) : 0;
+		Integer count = this.tagToCount.get(t);
+		return count != null ? count : 0;
 	}
 
 
@@ -90,7 +91,8 @@ public class Language implements Serializable {
 
 	public int getWordCount(String w) {
 		w = this.normalizeWord(w);
-		return this.wordToCount.containsKey(w) ? this.wordToCount.get(w) : 0;
+		Integer count = this.wordToCount.get(w);
+		return count != null ? count : 0;
 	}
 
 	public int getTagTypeCount() {
@@ -133,21 +135,20 @@ public class Language implements Serializable {
 
 	public int getTagTagCount(String t1, String t2) {
     	HashMap<String, Integer> nextTagToCount = this.tagToNextTags.get(t1);
-        if (nextTagToCount == null) {
-        	nextTagToCount = new HashMap<String, Integer>();
-            this.tagToNextTags.put(t1, nextTagToCount);
-        }
-        return nextTagToCount.containsKey(t2) ? nextTagToCount.get(t2) : 0;
+    	if (nextTagToCount == null) {
+    		return 0;
+    	}
+    	Integer count = nextTagToCount.get(t2);
+    	return count != null ? count : 0;
 	}
 
 	public int getWordTagCount(String w, String t) {
     	HashMap<String, Integer> wordToCount = this.tagToWords.get(t);
-        if (wordToCount == null) {
-        	wordToCount = new HashMap<String, Integer>();
-            this.tagToWords.put(t, wordToCount);
-        }
-        w = this.normalizeWord(w);
-        return wordToCount.containsKey(w) ? wordToCount.get(w) : 0;
+    	if (wordToCount == null) {
+    		return 0;
+    	}
+    	Integer count = wordToCount.get(w);
+    	return count != null ? count : 0;
 	}
 
 	private String normalizeWord(String w) {
