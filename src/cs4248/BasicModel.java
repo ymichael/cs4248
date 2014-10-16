@@ -1,3 +1,4 @@
+package cs4248;
 
 public class BasicModel implements IModel {
 	protected Language language;

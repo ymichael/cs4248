@@ -1,3 +1,4 @@
+package cs4248;
 
 public class LaplaceModel extends BasicModel {
 	Long allPossibleWordTagTypes;

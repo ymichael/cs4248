@@ -1,3 +1,4 @@
+package cs4248;
 
 /**
  * A Tagged Token. eg. "Token/NN"

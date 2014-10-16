@@ -1,3 +1,4 @@
+package cs4248;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

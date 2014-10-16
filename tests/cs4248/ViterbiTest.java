@@ -1,8 +1,12 @@
+package cs4248;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import cs4248.IModel;
+import cs4248.Viterbi;
 
 
 public class ViterbiTest {

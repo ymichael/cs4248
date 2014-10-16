@@ -1,3 +1,4 @@
+package cs4248;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,7 +18,7 @@ public class Utils {
 	 * @return
 	 * @throws IOException
 	 */
-	static String[] readLines(String filePath) throws IOException {
+	public static String[] readLines(String filePath) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filePath));
 		Collection<String> lines = new ArrayList<String>();
 	    try {
@@ -37,7 +38,7 @@ public class Utils {
 	 * @param taggedSentence
 	 * @return
 	 */
-    static TaggedToken[] parseSentence(String taggedSentence) {
+	public static TaggedToken[] parseSentence(String taggedSentence) {
         String[] tokens = taggedSentence.split(" ");
         TaggedToken[] taggedTokens = new TaggedToken[tokens.length];
         for (int j = 0; j < tokens.length; j++) {
@@ -46,7 +47,7 @@ public class Utils {
         return taggedTokens;
     }
 
-    static String getTaggedSentence(TaggedToken[] taggedTokens) {
+    public static String getTaggedSentence(TaggedToken[] taggedTokens) {
     	StringBuilder stringBuilder = new StringBuilder();
         for (int j = 0; j < taggedTokens.length; j++) {
         	if (j != 0) {
@@ -62,7 +63,7 @@ public class Utils {
      * @param taggedSentence
      * @return
      */
-    static String stripTags(String taggedSentence) {
+    public static String stripTags(String taggedSentence) {
         TaggedToken[] taggedTokens = parseSentence(taggedSentence);
         StringBuilder stringBuilder = new StringBuilder();
         for (int j = 0; j < taggedTokens.length; j++) {

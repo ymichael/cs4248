@@ -1,3 +1,4 @@
+package cs4248;
 
 public class WittenBellModel extends BasicModel {
 	Long allPossibleWordTagTypes;

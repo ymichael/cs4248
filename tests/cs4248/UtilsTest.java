@@ -1,6 +1,10 @@
+package cs4248;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import cs4248.TaggedToken;
+import cs4248.Utils;
 
 
 public class UtilsTest {

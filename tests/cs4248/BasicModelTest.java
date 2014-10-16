@@ -1,7 +1,12 @@
+package cs4248;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import cs4248.BasicModel;
+import cs4248.IModel;
+import cs4248.Language;
 
 
 public class BasicModelTest {
