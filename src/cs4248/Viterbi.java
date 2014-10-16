@@ -1,91 +1,90 @@
 package cs4248;
 
-import java.util.HashMap;
-
 
 public class Viterbi {
 	private IModel model;
 	private String[] allTags;
 	private String[] tokens;
-	private HashMap<Integer, HashMap<String, String>> indexAndCurrentTagToBestNextTag;
-	private HashMap<Integer, HashMap<String, Double>> indexAndCurrentTagToMaxProbability;
-
+	
+	private double[][] memo;
+	private int[][] memoTags ;
+	
 	private Double maxProbability;
-	private String bestFirstTag;
+	private String taggedSentence;
 
 	public Viterbi(IModel model, String[] allTags, String sentenceToTag) {
 		this.model = model;
 		this.tokens = sentenceToTag.split(" ");
 		this.allTags = allTags;
+		this.memo = new double[this.tokens.length][this.allTags.length];
+		this.memoTags = new int[this.tokens.length][this.allTags.length];
 	}
 
 	public double getMaxProbability() {
 		if (this.maxProbability == null) {
-			this.run();
+			this.runIter();
 		}
 		return this.maxProbability;
 	}
 
 	public String getTaggedSentence() {
-		if (this.bestFirstTag == null) {
-			this.run();
+		if (this.taggedSentence == null) {
+			this.runIter();
 		}
-
-		String[] bestTags = new String[this.tokens.length];
-		bestTags[0] = this.bestFirstTag;
-		for (int i = 1; i < this.tokens.length; i++) {
-			bestTags[i] = this.indexAndCurrentTagToBestNextTag.get(i - 1).get(bestTags[i - 1]);
-		}
-
-		TaggedToken[] taggedTokens = new TaggedToken[this.tokens.length];
-
-		for (int i = 0; i < tokens.length; i++) {
-			taggedTokens[i] = new TaggedToken(this.tokens[i], bestTags[i]);
-		}
-		return Utils.getTaggedSentence(taggedTokens);
+		return this.taggedSentence;
 	}
 
 	/**
-	 * Run the viterbi algorithm.
+	 * Run the viterbi algorithm. (Iterative version).
 	 */
-	private void run() {
-		this.indexAndCurrentTagToBestNextTag = new HashMap<Integer, HashMap<String,String>>();
-		this.indexAndCurrentTagToMaxProbability = new HashMap<Integer, HashMap<String,Double>>();
+	private void runIter() {
 		for (int i = 0; i < tokens.length; i++) {
-			this.indexAndCurrentTagToBestNextTag.put(i, new HashMap<String, String>());
-			this.indexAndCurrentTagToMaxProbability.put(i, new HashMap<String, Double>());
+			for (int j = 0; j < allTags.length; j++) {
+				memo[i][j] = Math.log(this.model.getProbabilityOfWordGivenTag(tokens[i], allTags[j]));
+				if (i == 0) {
+					memo[i][j] += Math.log(this.model.getProbablityOfTagGivenStart(allTags[j]));
+				}
+				if (i != 0) {
+					double max = Double.NEGATIVE_INFINITY;
+					for (int k = 0; k < allTags.length; k++) {
+						double prob = memo[i - 1][k] +
+							Math.log(this.model.getProbabilityOfNextTagGivenTag(allTags[j], allTags[k]));
+						if (max < prob) {
+							max = prob;
+							memoTags[i][j] = k;
+						}
+					}
+					memo[i][j] += max;
+				}
+				if (i == tokens.length - 1) {
+					memo[i][j] += Math.log(this.model.getProbabilityOfEndGivenTag(allTags[j]));
+				}
+			}
 		}
 
+		int finalTagIndex = 0;
 		double max = Double.NEGATIVE_INFINITY;
-		for (String tag : this.allTags) {
-			double p = this.model.getProbablityOfTagGivenStart(tag) * this.maxProbablityFrom(0, tag);
-			if (p > max) {
-				max = p;
-				maxProbability = max;
-				bestFirstTag = tag;
-			}
+		for (int k = 0; k < allTags.length; k++) {
+			if (max < memo[tokens.length - 1][k]) {
+				max = memo[tokens.length - 1][k];
+				finalTagIndex = k;
+			}		
 		}
-	}
+		this.maxProbability = memo[tokens.length - 1][finalTagIndex];
 
-	private double maxProbablityFrom(int index, String currentTag) {
-		if (!this.indexAndCurrentTagToMaxProbability.get(index).containsKey(currentTag)) {
-			String currentWord = this.tokens[index];
-			double max = Double.NEGATIVE_INFINITY;
-			for (String nextTag : this.allTags) {
-				double p = this.model.getProbabilityOfWordGivenTag(currentWord, currentTag);
-				if (index == this.tokens.length - 1) {
-					p *= this.model.getProbabilityOfEndGivenTag(currentTag);
-				} else {
-					p *= this.model.getProbabilityOfNextTagGivenTag(nextTag, currentTag);
-					p *= this.maxProbablityFrom(index + 1, nextTag);
-				}
-				if (p >= max) {
-					max = p;
-					this.indexAndCurrentTagToBestNextTag.get(index).put(currentTag, nextTag);
-					this.indexAndCurrentTagToMaxProbability.get(index).put(currentTag, max);
-				}
-			}
+		// Get tagged sentence.
+		String[] bestTags = new String[this.tokens.length];
+		int tokenIndex = tokens.length - 1;
+		int tagIndex = finalTagIndex;
+		while (tokenIndex >= 0) {
+			bestTags[tokenIndex] = allTags[tagIndex];
+			tagIndex = memoTags[tokenIndex][tagIndex];
+			tokenIndex--;
 		}
-		return this.indexAndCurrentTagToMaxProbability.get(index).get(currentTag);
+		TaggedToken[] taggedTokens = new TaggedToken[this.tokens.length];
+		for (int i = 0; i < tokens.length; i++) {
+			taggedTokens[i] = new TaggedToken(this.tokens[i], bestTags[i]);
+		}
+		this.taggedSentence = Utils.getTaggedSentence(taggedTokens);
 	}
 }
