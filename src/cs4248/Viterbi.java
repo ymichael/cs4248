@@ -58,7 +58,7 @@ public class Viterbi {
 
 		double max = Double.NEGATIVE_INFINITY;
 		for (String tag : this.allTags) {
-			double p = Math.log(this.model.getProbablityOfTagGivenStart(tag)) + this.maxProbablityFrom(0, tag);
+			double p = this.model.getProbablityOfTagGivenStart(tag) * this.maxProbablityFrom(0, tag);
 			if (p > max) {
 				max = p;
 				maxProbability = max;
@@ -72,12 +72,12 @@ public class Viterbi {
 			String currentWord = this.tokens[index];
 			double max = Double.NEGATIVE_INFINITY;
 			for (String nextTag : this.allTags) {
-				double p = Math.log(this.model.getProbabilityOfWordGivenTag(currentWord, currentTag));
+				double p = this.model.getProbabilityOfWordGivenTag(currentWord, currentTag);
 				if (index == this.tokens.length - 1) {
-					p += Math.log(this.model.getProbabilityOfEndGivenTag(currentTag));
+					p *= this.model.getProbabilityOfEndGivenTag(currentTag);
 				} else {
-					p += Math.log(this.model.getProbabilityOfNextTagGivenTag(nextTag, currentTag));
-					p += this.maxProbablityFrom(index + 1, nextTag);
+					p *= this.model.getProbabilityOfNextTagGivenTag(nextTag, currentTag);
+					p *= this.maxProbablityFrom(index + 1, nextTag);
 				}
 				if (p >= max) {
 					max = p;
