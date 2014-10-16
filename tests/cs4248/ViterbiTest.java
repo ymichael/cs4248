@@ -37,7 +37,7 @@ public class ViterbiTest {
 		stubWordTag("plants", "N", (double) 1/10);
 		stubWordTag("plants", "V", (double) 1/20);
 
-		assertEquals(Math.log((double) 3/5000), viterbi.getMaxProbability(), 0.000001 /* delta */);
+		assertEquals((double) 3/5000, viterbi.getMaxProbability(), 0.000001 /* delta */);
 		assertEquals("water/V plants/N", viterbi.getTaggedSentence());
 	}
 	
@@ -95,8 +95,8 @@ public class ViterbiTest {
 		stubWordTag("plants", "D", (double) 1/20);
 
 
-//		assertEquals(Math.log((double) 3/5000), viterbi.getMaxProbability(), 0.000001 /* delta */);
-		assertEquals("water/V plants/N", viterbi.getTaggedSentence());
+		assertEquals((double) 16/2000000000, viterbi.getMaxProbability(), 0.000001 /* delta */);
+		assertEquals("he/B is/A watering/A plants/B", viterbi.getTaggedSentence());
 	}
 
 	private void stubTagTag(String t2, String t1, double p) {
