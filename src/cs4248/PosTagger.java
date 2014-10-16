@@ -19,8 +19,6 @@ public class PosTagger implements Serializable {
         this.trainingSentences = trainingSentences;
         this.developmentSentences = developmentSentences;
         this.language = new Language();
-        this.model = new WittenBellModel(this.language);
-        // this.model = new LaplaceModel(this.language);
     }
 
     public IModel getModel() {
@@ -56,7 +54,7 @@ public class PosTagger implements Serializable {
 
             // Tag using language model.
             String taggedSentence =
-            	new Viterbi(this.model, this.language.getAllTags(), untaggedSentence).getTaggedSentence();
+            	new Viterbi(getModel(), this.language.getAllTags(), untaggedSentence).getTaggedSentence();
             TaggedToken[] actualTaggedTokens = Utils.parseSentence(taggedSentence);
 
             for (int j = 0; j < actualTaggedTokens.length; j++) {
